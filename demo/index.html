@@ -36,12 +36,12 @@
 	      reader.onload = (function(theFile) {
 	        return function(e) {
 	          // Render panorama.
-	          var span = document.createElement('div');
-					span.setAttribute("class", "revolver revolver-slide");
-	          span.innerHTML = ['<img class="revolver-item revolver-active" src="', e.target.result,
+	          var pan = document.createElement('div');
+					pan.setAttribute("class", "revolver revolver-slide");
+	          pan.innerHTML = ['<img class="revolver-item revolver-active" src="', e.target.result,
 	                            '" title="', escape(theFile.name), '"/><img class="revolver-item" src="', e.target.result,
 						                            '" title="', escape(theFile.name), '"/>'].join('');
-	          document.getElementById('list').insertBefore(span, null);
+	          document.getElementById('list').insertBefore(pan, null);
 	        };
 	      })(f);
 
