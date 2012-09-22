@@ -1,29 +1,62 @@
-<!doctype html>
-<!--[if lte IE 8]> <html lang="en" class="ie-lte8"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Revolver Demo</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="../dist/Revolver.min.css">
+<!doctype html> 
+<!--[if lte IE 8]> <html lang="en" class="ie-lte8"> <![endif]--> 
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]--> 
+<head> 
+	<meta charset="utf-8"> 
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<title>Revolver + Client-Side Photo Upload on iOS 6 Safari 6</title> 
 
-	<style>
+	<link rel="stylesheet" href="../dist/Revolver.min.css"> 
+	<style> 
 		.wrap {
 			max-width: 1000px;
 		}
-	</style>
-</head>
+	</style> 
+</head> 
 <body>
+	<form>
+		<label>Panorama Image:</label>
+		<input type="file" id="files" name="files[]" />
+			</form>
+	<script>
+	  function handleFileSelect(evt) {
+	    var files = evt.target.files; // FileList object
+
+	    // Loop through the FileList and render panorama file.
+	    for (var i = 0, f; f = files[i]; i++) {
+
+	      // Only process image files.
+	      if (!f.type.match('image.*')) {
+	        continue;
+	      }
+
+	      var reader = new FileReader();
+
+	      // Closure to capture the file information.
+	      reader.onload = (function(theFile) {
+	        return function(e) {
+	          // Render panorama.
+	          var span = document.createElement('div');
+					span.setAttribute("class", "revolver revolver-slide");
+	          span.innerHTML = ['<img class="revolver-item revolver-active" src="', e.target.result,
+	                            '" title="', escape(theFile.name), '"/><img class="revolver-item" src="', e.target.result,
+						                            '" title="', escape(theFile.name), '"/>'].join('');
+	          document.getElementById('list').insertBefore(span, null);
+	        };
+	      })(f);
+
+	      // Read in the image file as a data URL.
+	      reader.readAsDataURL(f);
+	    }
+	  }
+	  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+	</script>
 	<figure class="wrap">
-		<div class="revolver">
-			<img src="Space_Needle_360_Panorama.png">
-		</div>
-		<figcaption>
-			<p>Image from <a href="http://en.wikipedia.org/wiki/File:Space_Needle_360_Panorama.jpg">Wikipedia</a>; original image at <a href="www.arminhornung.de">www.arminhornung.de</a></p>
-		</figcaption>
-	</figure>
+		<object id="list">
+
+		</object>
+	</figure> 
 	<script src="../libs/jquery/jquery.js"></script>
-	<script src="../dist/Revolver.js"></script>
-</body>
+	<script src='../dist/Revolver.js'></script>
+</body> 
 </html>
